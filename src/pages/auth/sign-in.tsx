@@ -1,14 +1,13 @@
 import { Helmet } from 'react-helmet-async'
-
 import { useForm } from 'react-hook-form'
-
 import { Button } from '@/components/ui/button'
 import { Label } from '@radix-ui/react-label'
 import { Input } from '@/components/ui/input'
-
 import { z } from 'zod'
 import { toast } from 'sonner'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useMutation } from '@tanstack/react-query'
+import { signIn } from '@/api/sign-in'
 
 const signInform = z.object({
   email: z.string().email(),
@@ -18,14 +17,34 @@ const signInform = z.object({
 type SignInForm = z.infer<typeof signInform>
 
 export function SignIn() {
+  const navigate = useNavigate()
+
   const { register, handleSubmit, formState: { isSubmitting } } = useForm<SignInForm>()
 
+  const { mutateAsync: authenticate } = useMutation({
+    mutationFn: signIn
+  })
+
   async function handleSignIn(data: SignInForm) {
+    try {
+      const response = await authenticate({
+        email: data.email,
+        password: data.password,
+      })
 
-    console.log(data)
-    await new Promise((resolve) => setTimeout(resolve, 3000))
+      if (!response.token) {
+        toast.error('Falha na autenticação')
+        return
+      }
 
-    toast.success('Autenticação realizada com sucesso')
+      localStorage.setItem('token', response.token)
+      toast.success('Autenticação realizada com sucesso')
+
+      navigate('/')
+    } catch (error: any) {
+      const message = error?.response?.data?.message || 'Erro ao tentar autenticar'
+      toast.error(message)
+    }
   }
 
   return (

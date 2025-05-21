@@ -7,6 +7,7 @@ import { Label } from '@radix-ui/react-label'
 import { Input } from '@/components/ui/input'
 
 import { z } from 'zod'
+import { toast } from 'sonner'
 
 const signInform = z.object({
   email: z.string().email(),
@@ -22,6 +23,8 @@ export function SignIn() {
 
     console.log(data)
     await new Promise((resolve) => setTimeout(resolve, 3000))
+
+    toast.success('Autenticação realizada com sucesso')
   }
 
   return (

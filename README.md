@@ -36,4 +36,18 @@ Você pode baixar e instalar:
 ### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/phsousadev/school-canteen-frontend.git
+git clone https://github.com/phsousadev/school-canteen-web.git
+```
+
+### 2. Criando o arquivo `.env`
+
+Copie o conteúdo do arquivo `.env.local.example` para um novo arquivo `.env` na raiz do projeto, mantendo as mesmas configurações iniciais:
+
+```bash
+cp .env.example .env
+```
+
+### 3. Execute Docker 
+```bash
+docker compose up -d
+```

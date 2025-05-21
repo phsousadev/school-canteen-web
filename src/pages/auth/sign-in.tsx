@@ -1,6 +1,8 @@
 import { Helmet } from 'react-helmet-async'
 
 import { Button } from '@/components/ui/button'
+import { Label } from '@radix-ui/react-label'
+import { Input } from '@/components/ui/input'
 
 export function SignIn() {
   return (
@@ -13,15 +15,29 @@ export function SignIn() {
             <h1 className="text-2xl font-semibold tracking-tight">
               Acessar painel
             </h1>
-            <p className="text-sm text-muted-foreground">
-              Acompanhe suas vendas
-            </p>
           </div>
 
           <form className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Seu e-mail</Label>
-              <Input id="email" type="email" />
+              <Label htmlFor="email">E-mail</Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password">Senha</Label>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+              />
             </div>
 
             <Button className="w-full" type="submit">

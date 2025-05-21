@@ -1,13 +1,45 @@
-import { ArrowRight, Search, X } from 'lucide-react'
+import { Search, X } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { TableCell, TableRow } from '@/components/ui/table'
 import { Dialog, DialogTrigger } from '@radix-ui/react-dialog'
 import { OrderDetails } from './order-details'
+import { formatDistanceToNow } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 
-// interface OrderTableRowProps {}
+interface OrderTableRowProps {
+  order: {
+    orderId: string
+    createdAt: string
+    status: 'PENDING' | 'IN_PREPARATION' | 'READY' | 'DELIVERED'
+    customerName: string
+    total: number
+  }
+}
 
-export function OrderTableRow() {
+function formatCurrency(value: number) {
+  return value.toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  })
+}
+
+function getStatusColor(status: OrderTableRowProps['order']['status']) {
+  switch (status) {
+    case 'PENDING':
+      return 'bg-yellow-400'
+    case 'IN_PREPARATION':
+      return 'bg-blue-400'
+    case 'READY':
+      return 'bg-green-400'
+    case 'DELIVERED':
+      return 'bg-gray-400'
+    default:
+      return 'bg-slate-400'
+  }
+}
+
+export function OrderTableRow({ order }: OrderTableRowProps) {
   return (
     <TableRow>
       <TableCell>
@@ -22,28 +54,31 @@ export function OrderTableRow() {
           <OrderDetails />
         </Dialog>
       </TableCell>
+
       <TableCell className="font-mono text-xs font-medium">
-        821e78f7asdhdf128h
+        {formatDistanceToNow(new Date(order.createdAt), {
+          locale: ptBR,
+          addSuffix: true,
+        })}
       </TableCell>
-      <TableCell className="text-muted-foreground">há 15 minutos</TableCell>
+
       <TableCell>
         <div className="flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-slate-400" />
-          <span className="font-medium text-muted-foreground">Pendente</span>
+          <span className={`h-2 w-2 rounded-full ${getStatusColor(order.status)}`} />
+          <span className="font-medium text-muted-foreground">
+            {order.status.replace(/_/g, ' ')}
+          </span>
         </div>
       </TableCell>
-      <TableCell className="font-medium">Pedro Sousa</TableCell>
-      <TableCell className="font-medium">R$ 14,20</TableCell>
-      <TableCell>
-        <Button variant="outline" size="xs">
-          <ArrowRight className="mr-2 h-3 w-3" />
-          Aprovar
-        </Button>
-      </TableCell>
-      <TableCell>
+
+      <TableCell className="font-medium">{order.customerName}</TableCell>
+
+      <TableCell className="font-medium">{formatCurrency(order.total)}</TableCell>
+
+      <TableCell className="flex gap-2">
         <Button variant="ghost" size="xs">
           <X className="mr-2 h-3 w-3" />
-          Cancelar
+          Excluir
         </Button>
       </TableCell>
     </TableRow>

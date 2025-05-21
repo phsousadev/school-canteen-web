@@ -7,6 +7,7 @@ import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { signUp } from '@/api/sign-up'
 
 const signUpForm = z.object({
   name: z.string(),
@@ -28,18 +29,19 @@ export function SignUp() {
 
   async function handleSignUp(data: SignUpForm) {
     try {
-      console.log(data)
-
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-
-      toast.success('Usuário cadastrado com sucesso!', {
-        action: {
-          label: 'Login',
-          onClick: () => navigate('/sign-in'),
-        },
+      await signUp({
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        password: data.password
       })
-    } catch (error) {
-      toast.error('Erro ao cadastrar usuário.')
+
+      toast.success('Usuário cadastrado com sucesso!')
+
+      navigate('/sign-in')
+    } catch (error: any) {
+      const message = error?.response?.data?.message || 'Erro ao cadastrar usuário.'
+      toast.error(message)
     }
   }
 
@@ -76,7 +78,7 @@ export function SignUp() {
 
             <div className="space-y-2">
               <Label htmlFor="phone">Celular</Label>
-              <Input id="phone" type="tel" {...register('phone')} />
+              <Input id="phone" type="phone" {...register('phone')} />
             </div>
 
             <div className="space-y-2">
@@ -86,6 +88,7 @@ export function SignUp() {
                 type="password"
                 autoComplete="current-password"
                 required
+                {...register('password')}
               />
             </div>
 

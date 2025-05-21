@@ -7,6 +7,7 @@ import { SignUp } from './pages/auth/sign-up'
 import { Orders } from './pages/app/orders/orders'
 import { Dashboard } from './pages/app/dashboard/dashboard'
 import { NotFound } from './pages/404'
+import { ProtectedRoute } from './components/protected-route'
 
 export const router = createBrowserRouter([
   {
@@ -15,12 +16,17 @@ export const router = createBrowserRouter([
     errorElement: <NotFound />,
     children: [
       {
-        path: '/',
-        element: <Dashboard />,
-      },
-      {
-        path: '/orders',
-        element: <Orders />,
+        element: <ProtectedRoute />, 
+        children: [
+          {
+            path: '/',
+            element: <Dashboard />,
+          },
+          {
+            path: '/orders',
+            element: <Orders />,
+          },
+        ],
       },
     ],
   },

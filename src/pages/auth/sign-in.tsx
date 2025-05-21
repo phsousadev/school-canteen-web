@@ -8,6 +8,7 @@ import { toast } from 'sonner'
 import { Link, useNavigate } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import { signIn } from '@/api/sign-in'
+import { useAuth } from '@/context/AuthContext'
 
 const signInform = z.object({
   email: z.string().email(),
@@ -18,6 +19,7 @@ type SignInForm = z.infer<typeof signInform>
 
 export function SignIn() {
   const navigate = useNavigate()
+  const { login } = useAuth()
 
   const { register, handleSubmit, formState: { isSubmitting } } = useForm<SignInForm>()
 
@@ -37,10 +39,11 @@ export function SignIn() {
         return
       }
 
-      localStorage.setItem('token', response.token)
+      login(response.token)  // Atualiza o contexto e salva no localStorage
+
       toast.success('Autenticação realizada com sucesso')
 
-      navigate('/')
+      navigate('/', { replace: true }) // Redireciona para a página inicial
     } catch (error: any) {
       const message = error?.response?.data?.message || 'Erro ao tentar autenticar'
       toast.error(message)

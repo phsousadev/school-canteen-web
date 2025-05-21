@@ -97,6 +97,8 @@ export function Orders() {
                         total: calculateOrderTotal(order.items),
                         customerName: order.user.name,
                         createdAt: String(order.createdAt),
+                        user: order.user,
+                        items: order.items
                       }}
                     />
                   ))

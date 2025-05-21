@@ -12,14 +12,14 @@ interface OrderItemProduct {
   category: ProductCategory
 }
 
-interface OrderItemResponse {
+export interface OrderItemResponse {
   id: string
   quantity: number
   unitPrice: number
   product: OrderItemProduct
 }
 
-interface OrderUser {
+export interface OrderUser {
   id: string
   name: string
   email: string

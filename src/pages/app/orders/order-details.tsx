@@ -14,11 +14,38 @@ import {
   TableRow,
 } from '@/components/ui/table'
 
-export function OrderDetails() {
+interface OrderDetailsProps {
+  orderId: string
+  status: string
+  statusColor?: string
+  customerName: string
+  phone: string
+  email: string
+  createdAt: string
+  items: {
+    productName: string
+    quantity: number
+    unitPrice: number
+  }[]
+}
+
+export function OrderDetails({
+  orderId,
+  status,
+  statusColor = 'bg-slate-400',
+  customerName,
+  phone,
+  email,
+  createdAt,
+  items
+}: OrderDetailsProps) {
+
+  const total = items.reduce((sum, item) => sum + item.quantity * item.unitPrice, 0)
+
   return (
     <DialogContent>
       <DialogHeader>
-        <DialogTitle>Pedido: 1827fy2827d6h</DialogTitle>
+        <DialogTitle>Pedido: {orderId}</DialogTitle>
         <DialogDescription>Detalhes do pedido</DialogDescription>
       </DialogHeader>
 
@@ -29,9 +56,9 @@ export function OrderDetails() {
               <TableCell className="text-muted-foreground">Status</TableCell>
               <TableCell className="flex justify-end">
                 <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-slate-400" />
+                  <span className={`h-2 w-2 rounded-full ${statusColor}`} />
                   <span className="font-medium text-muted-foreground">
-                    Pendente
+                    {status}
                   </span>
                 </div>
               </TableCell>
@@ -39,26 +66,28 @@ export function OrderDetails() {
             <TableRow>
               <TableCell className="text-muted-foreground">Cliente</TableCell>
               <TableCell className="flex justify-end">
-                Diego Schell Fernandes
+                {customerName}
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell className="text-muted-foreground">Telefone</TableCell>
               <TableCell className="flex justify-end">
-                (47) 99999-9999
+                {phone}
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell className="text-muted-foreground">E-mail</TableCell>
               <TableCell className="flex justify-end">
-                diego@rocketseat.com.br
+                {email}
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell className="text-muted-foreground">
                 Realizado há
               </TableCell>
-              <TableCell className="flex justify-end">há 3 minutos</TableCell>
+              <TableCell className="flex justify-end">
+                {createdAt}
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
@@ -73,24 +102,24 @@ export function OrderDetails() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell>Pizza Pepperoni Família</TableCell>
-              <TableCell className="text-right">2</TableCell>
-              <TableCell className="text-right">R$ 69,90</TableCell>
-              <TableCell className="text-right">R$ 139,80</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Pizza Mussarela Família</TableCell>
-              <TableCell className="text-right">2</TableCell>
-              <TableCell className="text-right">R$ 59,90</TableCell>
-              <TableCell className="text-right">R$ 119,80</TableCell>
-            </TableRow>
+            {items.map((item, index) => (
+              <TableRow key={index}>
+                <TableCell>{item.productName}</TableCell>
+                <TableCell className="text-right">{item.quantity}</TableCell>
+                <TableCell className="text-right">
+                  {item.unitPrice.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                </TableCell>
+                <TableCell className="text-right">
+                  {(item.quantity * item.unitPrice).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
           <TableFooter>
             <TableRow>
               <TableCell colSpan={3}>Total do pedido</TableCell>
               <TableCell className="text-right font-medium">
-                R$ 259,60
+                {total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
               </TableCell>
             </TableRow>
           </TableFooter>

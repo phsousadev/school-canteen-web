@@ -6,6 +6,7 @@ import { Dialog, DialogTrigger } from '@radix-ui/react-dialog'
 import { OrderDetails } from './order-details'
 import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import type { OrderItemResponse, OrderUser } from '@/api/get-orders'
 
 interface OrderTableRowProps {
   order: {
@@ -14,6 +15,8 @@ interface OrderTableRowProps {
     status: 'PENDING' | 'IN_PREPARATION' | 'READY' | 'DELIVERED'
     customerName: string
     total: number
+    user: OrderUser,
+    items: OrderItemResponse[]
   }
 }
 
@@ -51,7 +54,25 @@ export function OrderTableRow({ order }: OrderTableRowProps) {
             </Button>
           </DialogTrigger>
 
-          <OrderDetails />
+          <OrderDetails
+            orderId={order.orderId}
+            status={order.status}
+            statusColor="bg-yellow-500"
+            customerName={order.customerName}
+            phone={order.user.phone}
+            email={order.user.email}
+            createdAt={formatDistanceToNow(new Date(order.createdAt), {
+              locale: ptBR,
+              addSuffix: true,
+            })}
+            items={order.items.map(item => ({
+              productName: item.product.name,
+              quantity: item.quantity,
+              unitPrice: typeof item.unitPrice === 'function'
+                ? item.unitPrice
+                : parseFloat(item.unitPrice.toString())
+            }))}
+          />
         </Dialog>
       </TableCell>
 

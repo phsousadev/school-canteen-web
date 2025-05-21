@@ -31,6 +31,12 @@ Você pode baixar e instalar:
 
 ---
 
+## 🌐 API em Produção
+
+A Aplicação WEB está disponível em produção no link:
+
+[https://school-canteen-web-git-main-pedro-sousas-projects-156db9d9.vercel.app](https://school-canteen-web-git-main-pedro-sousas-projects-156db9d9.vercel.app)
+
 ## 📦 Como Rodar o Projeto
 
 ### 1. Clone o repositório

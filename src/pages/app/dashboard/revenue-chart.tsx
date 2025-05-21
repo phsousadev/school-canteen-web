@@ -1,20 +1,19 @@
-import {
-  CartesianGrid,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
+import { 
+  CartesianGrid, 
+  Line, 
+  LineChart, 
+  ResponsiveContainer, 
+  XAxis, 
+  YAxis 
 } from 'recharts'
 import colors from 'tailwindcss/colors'
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+import { 
+  Card, 
+  CardContent, 
+  CardDescription, 
+  CardHeader, 
+  CardTitle 
 } from '@/components/ui/card'
 
 const data = [
@@ -38,6 +37,7 @@ export function RevenueChart() {
           <CardDescription>Receita diária no período</CardDescription>
         </div>
       </CardHeader>
+
       <CardContent>
         <ResponsiveContainer width="100%" height={240}>
           <LineChart data={data} style={{ fontSize: 12 }}>

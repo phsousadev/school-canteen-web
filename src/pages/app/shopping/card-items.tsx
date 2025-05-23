@@ -62,7 +62,6 @@ export function CartItems() {
       .finally(() => setLoading(false))
   }, [])
 
-  // Função para remover item localmente do estado
   function handleRemoveItem(id: string) {
     setCartItems((prev) => prev.filter(item => item.id !== id))
   }

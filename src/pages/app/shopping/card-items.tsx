@@ -20,6 +20,9 @@ import { getCartItems } from '@/api/get-cart-items'
 import { removeProductToCart } from '@/api/remove-product-to-cart'
 import { checkout } from '@/api/checkout'
 
+import { useNavigate } from 'react-router-dom'
+
+
 interface CartItem {
   id: string
   name: string
@@ -34,6 +37,7 @@ export function CartItems() {
   const [cartItems, setCartItems] = useState<CartItem[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     setLoading(true)
@@ -74,12 +78,11 @@ export function CartItems() {
   if (error) {
     return <div className="text-red-600">Erro: {error}</div>
   }
-
   async function handleCheckout() {
     try {
       await checkout()
-      window.location.reload()
       toast.success('Compra finalizada com sucesso!')
+      navigate('/') // <-- redireciona para página inicial
     } catch (error) {
       toast.error('Erro ao finalizar a compra.')
     }

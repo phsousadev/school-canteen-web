@@ -2,6 +2,7 @@ import { Helmet } from 'react-helmet-async'
 import { useQuery } from '@tanstack/react-query'
 import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import { toast } from 'sonner'
 
 import {
   Table,
@@ -11,12 +12,13 @@ import {
   TableRow,
   TableCell,
 } from '@/components/ui/table'
-
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { Search, X, ShoppingCart } from 'lucide-react'
+
 import { getProducts, type Product } from '@/api/get-products'
+import { addProductInCart } from '@/api/add-item-to-cart'
 
 export function Products() {
   const { data: products = [], isLoading, isError, error } = useQuery<Product[], Error>({
@@ -96,9 +98,19 @@ interface ProductTableRowProps {
 }
 
 function ProductTableRow({ product }: ProductTableRowProps) {
-  function handleAddToCart() {
-    console.log(`Produto adicionado: ${product.name}`)
-    // Aqui você pode chamar um contexto ou função para adicionar ao carrinho.
+  async function handleAddToCart() {
+    try {
+      const response = await addProductInCart(product)
+
+      if (!response) {
+        throw new Error('Erro ao adicionar ao carrinho.')
+      }
+
+      toast.success(`Produto "${product.name}" adicionado ao carrinho!`)
+    } catch (error: any) {
+      console.error(error)
+      toast.error('Erro ao adicionar produto ao carrinho.')
+    }
   }
 
   return (
@@ -137,41 +149,42 @@ function ProductDetailsDialog({ product }: { product: Product }) {
       </DialogHeader>
 
       <div className="space-y-4">
-        <div className="flex justify-between">
-          <span className="text-muted-foreground">ID:</span>
-          <span className="font-mono text-xs">{product.id}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-muted-foreground">Nome:</span>
-          <span>{product.name}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-muted-foreground">Preço:</span>
-          <span>{product.price}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-muted-foreground">Categoria:</span>
-          <span>{product.category.name}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-muted-foreground">Criado:</span>
-          <span>
-            {formatDistanceToNow(new Date(product.createdAt), {
-              locale: ptBR,
-              addSuffix: true,
-            })}
-          </span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-muted-foreground">Atualizado:</span>
-          <span>
-            {formatDistanceToNow(new Date(product.updatedAt), {
-              locale: ptBR,
-              addSuffix: true,
-            })}
-          </span>
-        </div>
+        <InfoRow label="ID" value={product.id} isCode />
+        <InfoRow label="Nome" value={product.name} />
+        <InfoRow label="Preço" value={String(product.price)} />
+        <InfoRow label="Categoria" value={product.category.name} />
+        <InfoRow
+          label="Criado"
+          value={formatDistanceToNow(new Date(product.createdAt), {
+            locale: ptBR,
+            addSuffix: true,
+          })}
+        />
+        <InfoRow
+          label="Atualizado"
+          value={formatDistanceToNow(new Date(product.updatedAt), {
+            locale: ptBR,
+            addSuffix: true,
+          })}
+        />
       </div>
     </DialogContent>
+  )
+}
+
+function InfoRow({
+  label,
+  value,
+  isCode = false,
+}: {
+  label: string
+  value: string
+  isCode?: boolean
+}) {
+  return (
+    <div className="flex justify-between">
+      <span className="text-muted-foreground">{label}:</span>
+      <span className={isCode ? 'font-mono text-xs' : ''}>{value}</span>
+    </div>
   )
 }

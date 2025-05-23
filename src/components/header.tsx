@@ -1,4 +1,4 @@
-import { Home, Pizza, UtensilsCrossed } from 'lucide-react'
+import { Home, Pizza, ShoppingCart, UtensilsCrossed } from 'lucide-react'
 
 import { NavLink } from './nav-link'
 import { Separator } from './ui/separator'
@@ -18,9 +18,9 @@ export function Header() {
             <Home className="h-4 w-4" />
             Início
           </NavLink>
-          <NavLink to="/app/orders">
-            <UtensilsCrossed className="h-4 w-4" />
-            Meus Pedidos
+          <NavLink to="/app/cart">
+            <ShoppingCart className="mr-2 h-4 w-4" />
+            Carrinho
           </NavLink>
         </nav>
 

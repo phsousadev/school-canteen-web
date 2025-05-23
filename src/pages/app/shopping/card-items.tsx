@@ -18,6 +18,7 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, Dialog
 import { Search, Trash2 } from 'lucide-react'
 import { getCartItems } from '@/api/get-cart-items'
 import { removeProductToCart } from '@/api/remove-product-to-cart'
+import { checkout } from '@/api/checkout'
 
 interface CartItem {
   id: string
@@ -74,9 +75,20 @@ export function CartItems() {
     return <div className="text-red-600">Erro: {error}</div>
   }
 
+  async function handleCheckout() {
+    try {
+      await checkout()
+      window.location.reload()
+      toast.success('Compra finalizada com sucesso!')
+    } catch (error) {
+      toast.error('Erro ao finalizar a compra.')
+    }
+  }
+
   return (
     <>
       <Helmet title="Meu Carrinho" />
+
 
       <section className="flex flex-col gap-4">
         <h1 className="text-xl font-semibold">Itens no Carrinho</h1>
@@ -86,7 +98,7 @@ export function CartItems() {
             Seu carrinho está vazio.
           </div>
         ) : (
-          <div className="rounded-md border">
+          <div className="relative rounded-md border p-4">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -105,6 +117,16 @@ export function CartItems() {
                 ))}
               </TableBody>
             </Table>
+
+            <div className="flex justify-end mt-4">
+              <Button
+                onClick={handleCheckout}
+                className="bg-green-600 hover:bg-green-700 text-white"
+                size="lg"
+              >
+                Finalizar Compra
+              </Button>
+            </div>
           </div>
         )}
       </section>

@@ -38,7 +38,7 @@ export function SignUp() {
 
       toast.success('Usuário cadastrado com sucesso!')
 
-      navigate('/sign-in')
+      navigate('/auth/sign-in')
     } catch (error: any) {
       const message = error?.response?.data?.message || 'Erro ao cadastrar usuário.'
       toast.error(message)

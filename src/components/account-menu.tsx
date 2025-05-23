@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { Building, ChevronDown, LogOut } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 import { getProfile } from '@/api/get-profile'
 
@@ -12,12 +13,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu'
+import { useAuth } from '@/context/AuthContext'
 
 export function AccountMenu() {
   const { data: profile, isLoading } = useQuery({
     queryKey: ['profile'],
     queryFn: getProfile,
   })
+
+  const { logout } = useAuth()
+  const navigate = useNavigate()
+
+  function handleLogout() {
+    logout()
+    navigate('/auth/sign-in', { replace: true })
+  }
 
   return (
     <DropdownMenu>
@@ -46,7 +56,10 @@ export function AccountMenu() {
           <span>Perfil da Cantina</span>
         </DropdownMenuItem>
 
-        <DropdownMenuItem className="text-rose-500 dark:text-rose-400">
+        <DropdownMenuItem
+          className="text-rose-500 dark:text-rose-400"
+          onClick={handleLogout}
+        >
           <LogOut className="mr-2 h-4 w-4" />
           <span>Sair</span>
         </DropdownMenuItem>

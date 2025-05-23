@@ -39,11 +39,11 @@ export function SignIn() {
         return
       }
 
-      login(response.token)  // Atualiza o contexto e salva no localStorage
+      login(response.token)
 
       toast.success('Autenticação realizada com sucesso')
 
-      navigate('/', { replace: true }) // Redireciona para a página inicial
+      navigate('/', { replace: true })
     } catch (error: any) {
       const message = error?.response?.data?.message || 'Erro ao tentar autenticar'
       toast.error(message)
@@ -56,7 +56,7 @@ export function SignIn() {
 
       <div className="p-8">
         <Button variant="outline" asChild className="absolute right-8 top-8">
-          <Link to="/sign-up">Novo cadastro</Link>
+          <Link to="/auth/sign-up">Novo cadastro</Link>
         </Button>
 
         <div className="flex w-[350px] flex-col justify-center gap-6">

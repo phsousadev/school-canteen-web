@@ -1,4 +1,4 @@
-import { Home, Pizza, ShoppingCart, UtensilsCrossed } from 'lucide-react'
+import { Home, Pizza, ShoppingCart } from 'lucide-react'
 
 import { NavLink } from './nav-link'
 import { Separator } from './ui/separator'

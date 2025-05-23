@@ -10,6 +10,7 @@ import { Dashboard } from './pages/app/dashboard/dashboard'
 import { NotFound } from './pages/404'
 import { ProtectedRoute } from './components/protected-route'
 import { RootRedirectWrapper } from './components/root-redirect-wrapper'
+import { Cart } from './pages/app/shopping/cart'
 
 export const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ export const router = createBrowserRouter([
           {
             path: 'shopping',
             element: <Shoping />,
+          },
+          {
+            path: 'cart',
+            element: <Cart />,
           },
         ],
       },

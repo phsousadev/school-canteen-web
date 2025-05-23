@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { Building, ChevronDown, LogOut } from 'lucide-react'
+import { ShoppingCart, ChevronDown, LogOut } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 import { getProfile } from '@/api/get-profile'
@@ -29,6 +29,10 @@ export function AccountMenu() {
     navigate('/auth/sign-in', { replace: true })
   }
 
+  function handleGoToCart() {
+    navigate('/app/cart')
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -51,9 +55,9 @@ export function AccountMenu() {
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem>
-          <Building className="mr-2 h-4 w-4" />
-          <span>Perfil da Cantina</span>
+        <DropdownMenuItem onClick={handleGoToCart}>
+          <ShoppingCart className="mr-2 h-4 w-4" />
+          <span>Meu Carrinho</span>
         </DropdownMenuItem>
 
         <DropdownMenuItem
